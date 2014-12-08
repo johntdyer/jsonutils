@@ -68,7 +68,6 @@ func Get(url string) ([]byte, string, error) {
 	}
 
 	client := &http.Client{Transport: tr}
-gd "github.com/bashtian/jsonutils"
 
 	req, err := client.NewRequest("GET", url, nil)
 	if err != nil {
