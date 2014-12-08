@@ -2,12 +2,14 @@ package jsonutils
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"go/format"
 	"io"
 	"io/ioutil"
 	"net"
+
 	"net/http"
 	"net/url"
 	"os"
@@ -60,12 +62,20 @@ func GetModel(url string) (*Model, error) {
 }
 
 func Get(url string) ([]byte, string, error) {
-	req, err := http.NewRequest("GET", url, nil)
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	client := &http.Client{Transport: tr}
+gd "github.com/bashtian/jsonutils"
+
+	req, err := client.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, "", err
 	}
 	req.Header.Add("Accept", "application/json")
-	r, err := http.DefaultClient.Do(req)
+	r, err := client.DefaultClient.Do(req)
 	if err != nil {
 		return nil, "", err
 	}
